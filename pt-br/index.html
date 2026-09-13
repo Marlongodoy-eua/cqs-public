@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Núcleo Oficial CQS</title>
+<style>
+:root{--bg:#ffffff;--ink:#1f2328;--muted:#57606a;--line:#d0d7de;--surface:#f6f8fa;
+--cmp-bg:#dafbe1;--cmp-ink:#1a7f37;--part-bg:#fff8c5;--part-ink:#9a6700;--not-bg:#eaeef2;--not-ink:#57606a;
+--eq:#0969da;--dd:#cf222e;--warn-bg:#fff8c5;--warn-ink:#9a6700;}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--ink:#e6edf3;--muted:#9198a1;
+--line:#30363d;--surface:#161b22;--cmp-bg:#12331d;--cmp-ink:#3fb950;--part-bg:#3a2e05;--part-ink:#d29922;
+--not-bg:#21262d;--not-ink:#9198a1;--eq:#58a6ff;--dd:#f85149;--warn-bg:#3a2e05;--warn-ink:#d29922;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+font:15px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+h1{font-size:24px;margin:0 0 4px}
+.scope{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--muted);
+border-radius:8px;padding:12px 14px;margin:16px 0;color:var(--muted);font-size:13.5px}
+.grid{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13.5px}
+.grid dt{color:var(--muted);min-width:0}
+.grid dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
+.badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
+.meter{background:var(--line);border-radius:4px;height:7px;overflow:hidden;margin-top:4px;width:100%}
+.meter>span{display:block;height:100%;background:var(--cmp-ink)}
+.cqa-scroll{overflow-x:auto}
+footer{margin-top:40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--eq);outline-offset:2px}
+.cqa-nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13px;margin:0 0 10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.cqa-nav a{color:var(--eq);text-decoration:none;font-weight:600}
+.cqa-nav a:hover{text-decoration:underline}
+.cqa-nav .sep{color:var(--muted)}
+.cqa-navrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;justify-content:space-between;border-bottom:1px solid var(--line);margin:0 0 10px;padding:8px 0}
+.cqa-navrow>.cqa-nav{flex:1 1 auto;border-bottom:0;margin:0;padding:0}
+.cqa-lang{display:flex;align-items:center;gap:6px;font-size:12px;flex:0 0 auto}
+.cqa-lang a{color:var(--muted);text-decoration:none;font-weight:600}
+.cqa-lang a:hover{color:var(--eq);text-decoration:underline}
+.cqa-lang__on{font-weight:700;color:var(--eq)}
+.cqa-lang__sep{color:var(--line)}
+.cqa-crumb{font-size:12.5px;color:var(--muted);margin:6px 0 14px}
+.cqa-crumb a{color:var(--eq);text-decoration:none}
+.cqa-crumb a:hover{text-decoration:underline}
+.cqa-files{list-style:none;padding:0;margin:8px 0;font-size:13px}
+.cqa-files li{padding:4px 0;border-bottom:1px dashed var(--line)}
+.cqa-files a{color:var(--eq);text-decoration:none}
+.cqa-files a:hover{text-decoration:underline}
+.cqa-files .na{color:var(--muted)}
+.cqa-open{display:inline-block;margin-top:8px;font-weight:600;color:var(--eq);text-decoration:none}
+.cqa-open:hover{text-decoration:underline}
+.cqa-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:10px 0}
+.cqa-kpi{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface)}
+.cqa-kpi .n{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.cqa-kpi .l{color:var(--muted);font-size:12px;margin-top:2px}
+.cqa-kpi .s{font-size:12.5px;font-weight:600;margin-top:4px}
+.cqa-tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:6px;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.cqa-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin:10px 0}
+.cqa-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface);overflow:hidden}
+.cqa-card h3{margin:0 0 4px;font-size:16px}
+.cqa-group{margin:22px 0}
+.cqa-badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;
+border-radius:999px;border:1px solid var(--line)}
+.cqa-badge--hom{background:var(--cmp-bg);color:var(--cmp-ink);border-color:var(--cmp-ink)}
+.cqa-badge--rec{background:var(--surface);color:var(--eq);border-color:var(--eq)}
+.cqa-badge--inc{background:var(--not-bg);color:var(--not-ink)}
+.cqa-q{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;margin:1px 3px 1px 0}
+.cqa-q--sample{background:transparent;color:var(--warn-ink);border:1px solid var(--warn-ink)}
+.cqa-q--pres{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-bg)}
+.cqa-q--div{background:var(--surface);color:var(--eq);border:1px solid var(--line)}
+.cqa-q--block{background:var(--dd);color:#ffffff;border:1px solid var(--dd)}
+.cqa-alert{border-radius:8px;padding:10px 12px;margin:8px 0;font-size:12.5px;border:1px solid var(--line)}
+.cqa-alert--info{background:var(--surface);color:var(--muted)}
+.cqa-alert--warn{background:var(--warn-bg);color:var(--warn-ink)}
+.cqa-alert--block{background:var(--dd);color:#ffffff;border-color:var(--dd)}
+main{max-width:1000px;margin:0 auto;padding:28px 20px 64px}
+h2{font-size:18px;margin:34px 0 8px}
+h3{font-size:16px;margin:0 0 2px}
+.sub{color:var(--muted);margin:0 0 12px;font-size:13px}
+.meta{color:var(--muted);font-size:12.5px;margin:0 0 10px}
+.clab{font-size:11.5px;color:var(--muted)}
+svg .zero{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3;opacity:.6}
+svg .eq{fill:none;stroke:var(--cmp-ink);stroke-width:2}
+svg .eqfill{fill:var(--cmp-ink);opacity:.12;stroke:none}
+svg .topo{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3;opacity:.7}
+svg .dd{fill:var(--dd);opacity:.28;stroke:var(--dd);stroke-width:1}
+svg text.elab{fill:var(--ink);font-size:9px;font-weight:600}
+svg text.elabm{fill:var(--muted);font-size:8.5px}
+ul.lim{color:var(--muted);font-size:12.5px}
+.month{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+table.mtab{border-collapse:collapse;font-size:13px;min-width:560px}
+table.mtab th,table.mtab td{border:1px solid var(--line);padding:5px 9px;text-align:right}
+table.mtab th{background:var(--surface);color:var(--muted);font-weight:600}
+table.mtab td:first-child,table.mtab th:first-child{text-align:left}
+svg .mbase{stroke:var(--muted);stroke-dasharray:3 3;opacity:.6}
+svg .mgain{fill:#2da44e}svg .mloss{fill:var(--dd)}svg .mnet{fill:var(--ink)}
+svg .mnetline{fill:none;stroke:var(--ink);stroke-width:1.5;opacity:.65}
+svg .mcum{fill:none;stroke:var(--eq);stroke-width:2}
+svg text.mlab{fill:var(--muted);font-size:8.5px}
+svg text.mvlab{fill:var(--ink);font-size:8.5px}
+svg text.mcumlab{fill:var(--eq);font-size:9px;font-weight:600}
+svg text.mleg{fill:var(--muted);font-size:9px}
+
+.ofc-asset{border:1px solid var(--line);border-left:4px solid var(--eq);border-radius:14px;
+padding:18px 18px 12px;margin:20px 0;background:var(--surface)}
+.ofc-asset__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:2px}
+.ofc-asset__head h2{margin:0;font-size:22px;border:0;padding:0}
+.ofc-asset__contract{color:var(--muted);font-size:12.5px}
+.ofc-rank{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em}
+
+.ofc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:14px;margin:14px 0 6px}
+.ofc-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg)}
+.ofc-card--combined{border-left:3px solid var(--eq)}
+.ofc-card h3{margin:0 0 2px;font-size:14px;letter-spacing:.04em}
+.ofc-card__verdict{font-size:11px;font-weight:700;color:var(--eq);margin:0 0 10px}
+.ofc-net{font-size:24px;font-weight:700;margin:0;line-height:1.15}
+.ofc-net__lab{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;display:block}
+.ofc-native{font-size:13px;color:var(--muted);margin:6px 0 10px}
+.ofc-kv{display:grid;grid-template-columns:auto auto;gap:2px 12px;font-size:12.5px;margin:0}
+.ofc-kv dt{color:var(--muted)}
+.ofc-kv dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.ofc-scenlab{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--muted);
+margin:12px 0 4px;padding-top:8px;border-top:1px solid var(--line)}
+.ofc-status{margin:10px 0 0;font-size:11px;color:var(--muted)}
+.ofc-combined-label{font-size:10.5px;color:var(--muted);letter-spacing:.04em;margin:8px 0 0}
+.ofc-note{font-size:12px;color:var(--muted);margin:8px 0 0}
+.ofc-warn{background:var(--warn-bg);color:var(--warn-ink);border-radius:8px;padding:10px 12px;
+font-size:12.5px;margin:12px 0 0}
+.ofc-agg{border:1px dashed var(--muted);border-radius:12px;padding:14px 16px;margin:22px 0}
+.ofc-agg h2{margin:0 0 2px;font-size:15px;border:0;padding:0}
+.ofc-agg__vals{display:flex;flex-wrap:wrap;gap:22px;margin:8px 0 6px}
+.ofc-agg__v{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.ofc-prov{font-size:11.5px;color:var(--muted)}
+.ofc-prov code{font-size:10.5px;word-break:break-all}
+.ofc-prov table{font-size:11px}
+.ofc-chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0 14px;
+font-size:11px;color:var(--muted)}
+.ofc-chain span{border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--surface)}
+.ofc-chain b{font-weight:700;color:var(--eq)}
+.ofc-sec{margin:26px 0 0}
+.ofc-sec>h2{font-size:17px}
+.ofc-sec__lead{font-size:12.5px;color:var(--muted);margin:0 0 4px}
+.ofc-stack{display:block}
+.ofc-stack>.ofc-figpair{margin:18px 0 4px}
+.ofc-figpair>h3{font-size:13px;letter-spacing:.04em;margin:0 0 2px}
+.ofc-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:20px}
+.ofc-tablewrap{overflow-x:auto;margin:10px 0}
+.ofc-tablewrap table{min-width:520px}
+.ofc-tablewrap td{font-variant-numeric:tabular-nums}
+.ofc-scen td.is-base,.ofc-scen th.is-base{background:var(--surface);font-weight:700}
+.ofc-scen td,.ofc-scen th{white-space:nowrap}
+.ofc-assetnav{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px}
+.ofc-assetnav a{border:1px solid var(--line);border-radius:10px;padding:8px 14px;
+text-decoration:none;color:var(--eq);font-size:12.5px;font-weight:600;background:var(--surface)}
+.ofc-assetnav a:hover{border-color:var(--eq)}
+.ofc-research h3{font-size:14px;margin:16px 0 4px}
+.ofc-research ul{margin:4px 0 0;padding-left:18px;font-size:13px;list-style:none}
+.ofc-research li{margin:5px 0;padding-left:2px}
+.ofc-link{color:var(--eq);text-decoration:none;font-weight:600}
+.ofc-link:hover{text-decoration:underline}
+.ofc-link::before{content:"› ";color:var(--muted);font-weight:400}
+.ofc-smalls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:16px;margin:12px 0 4px}
+.ofc-small{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)}
+.ofc-small>h3{margin:0 0 6px;font-size:13px;letter-spacing:.04em}
+
+.ofc-pipe{border:1px solid var(--line);border-radius:14px;padding:18px;margin:22px 0;
+background:var(--surface)}
+.ofc-pipe>h2{margin:0 0 4px;font-size:17px;border:0;padding:0}
+.ofc-pipe__lead{font-size:13.5px;margin:0 0 14px;color:var(--ink);max-width:74ch}
+.ofc-pipe__steps{list-style:none;margin:0;padding:0;display:grid;
+grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:10px}
+.ofc-pipe__step{border:1px solid var(--line);border-left:3px solid var(--eq);border-radius:10px;
+padding:10px 12px;background:var(--bg);position:relative}
+.ofc-pipe__n{display:inline-block;font-size:10px;font-weight:700;color:var(--muted);
+letter-spacing:.1em}
+.ofc-pipe__t{display:block;font-size:12.5px;font-weight:700;margin:2px 0 4px;line-height:1.25}
+.ofc-pipe__d{display:block;font-size:11px;color:var(--muted);line-height:1.35}
+.ofc-pipe__cap{font-size:11.5px;color:var(--muted);margin:12px 0 0}
+
+.ofc-wip{border:1px dashed var(--muted);border-radius:14px;padding:16px 18px;margin:24px 0}
+.ofc-wip>h2{margin:0 0 2px;font-size:16px;border:0;padding:0;color:var(--muted)}
+.ofc-wip__lead{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+.ofc-wip__cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:14px}
+.ofc-wip__card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface)}
+.ofc-wip__name{font-size:13.5px;font-weight:700;margin:0 0 2px}
+.ofc-wip__alt{font-size:11.5px;color:var(--muted);margin:0 0 8px}
+.ofc-wip__badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;
+padding:2px 9px;border-radius:999px;border:1px solid var(--muted);color:var(--muted);
+background:var(--bg);margin:0 0 8px}
+.ofc-wip__desc{font-size:12px;color:var(--muted);margin:0}
+
+.cqa-fig{display:block;width:100%;height:auto;margin:6px 0 2px;overflow:visible}
+.cqa-figwrap{margin:14px 0 6px}
+.cqa-figwrap>figcaption{font-size:12px;color:var(--muted);margin:0 0 2px}
+.cqa-fignote{font-size:11.5px;color:var(--muted);margin:2px 0 0}
+</style><style data-cqa-brand="1" id="cqa-brand-layer">
+
+:root{
+  --cqa-navy-900:#0C1E2E; --cqa-navy-800:#10293D;
+  --cqa-navy-700:#16374F; --cqa-slate-600:#2E4C63;
+  --cqa-teal-600:#20706E; --cqa-teal-700:#1B5F5D;
+  --cqa-teal-navy:#5FBEBB;
+  --cqa-page:#FBFCFD; --cqa-gray-50:#F7F9FB;
+  --cqa-gray-100:#EEF2F5; --cqa-gray-200:#E1E7EC;
+  --cqa-gray-300:#CBD3DB;
+  --cqa-ink:#1E2A33; --cqa-secondary:#566370;
+  --cqa-on-navy:#FFFFFF; --cqa-on-navy-2:#CBD3DB;
+  --cqa-font:Inter, "Segoe UI", Arial, sans-serif;
+  --cqa-content:1000px;   
+}
+
+
+@media (prefers-color-scheme: dark){
+  :root{
+    
+    --cqa-page:#010409;
+    --cqa-gray-50:#161b22; --cqa-gray-100:#21262d;
+    --cqa-gray-200:#30363d; --cqa-gray-300:#444c56;
+    
+    --cqa-ink:#e6edf3;
+    --cqa-navy-900:#d6e2ee; --cqa-navy-800:#b7c5d3; --cqa-navy-700:#8b9bab;
+    --cqa-slate-600:#7d8fa1;
+    --cqa-secondary:#9aa4b0;
+    
+    --cqa-teal-600:#5FBEBB; --cqa-teal-700:#7ACFCC;
+  }
+  
+  .cqa-kpi{ background:var(--cqa-gray-50); }
+}
+
+
+body{ font-family:var(--cqa-font); color:var(--cqa-ink); background:var(--cqa-page); }
+h1{ font-size:28px; font-weight:700; letter-spacing:-.01em; color:var(--cqa-navy-900);
+    line-height:1.25; }
+h2{ font-size:21px; color:var(--cqa-navy-800); line-height:1.25;
+    padding-bottom:6px; border-bottom:1px solid var(--cqa-gray-200); }
+h3{ font-size:16px; color:var(--cqa-navy-800); }
+.sub{ color:var(--cqa-secondary); font-size:13.5px; }
+.meta,.wnote,.rnote{ color:var(--cqa-secondary); }
+
+
+td,th,.cqa-kpi .n,.rscore,.wval,.wtot,.n{ font-variant-numeric:tabular-nums;
+    font-feature-settings:"tnum" 1; }
+
+
+
+.cqa-brandbar{ background:var(--cqa-navy-800); border-bottom:3px solid var(--cqa-teal-600); }
+.cqa-brandbar__in{ max-width:var(--cqa-content); margin:0 auto; padding:21px 20px;
+    display:flex; align-items:center; }
+.cqa-brandbar svg{ height:48px; width:auto; display:block; }
+.cqa-brandbar .cqa-logo--print{ display:none; }
+
+
+.cqa-brandfoot{ background:var(--cqa-navy-900); margin-top:44px; }
+.cqa-brandfoot__in{ max-width:var(--cqa-content); margin:0 auto; padding:18px 20px;
+    display:flex; align-items:center; }
+.cqa-brandfoot svg{ height:34px; width:auto; display:block; }
+.cqa-brandfoot .cqa-logo--print{ display:none; }
+
+
+.cqa-nav{ border-bottom:1px solid var(--cqa-gray-200); padding:9px 0; margin-bottom:14px; }
+.cqa-nav a,.cqa-crumb a,.cqa-files a,.cqa-open,.cqa-xnav a{ color:var(--cqa-teal-700); }
+.cqa-nav .sep,.cqa-crumb .sep{ color:var(--cqa-gray-300); }
+
+
+.cqa-card,.cqa-xcard,.cqa-tier{ border:1px solid var(--cqa-gray-200); }
+.cqa-tier--core,.cqa-xcard{ border-left:4px solid var(--cqa-teal-600); }
+.cqa-tier--studies{ border-left:4px solid var(--cqa-slate-600); }
+.cqa-kpi{ border:1px solid var(--cqa-gray-200); background:#fff; }
+.scope{ border-left:3px solid var(--cqa-teal-600); }
+
+
+th{ background:var(--cqa-gray-100); color:var(--cqa-navy-800); font-size:12px;
+    font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+    border-bottom:2px solid var(--cqa-navy-700); }
+td,th{ border-bottom:1px solid var(--cqa-gray-200); }
+tbody tr:nth-child(even){ background:var(--cqa-gray-50); }
+
+
+.cqa-badge,.cqa-q,.wtag,.badge{ border-radius:3px; letter-spacing:.03em;
+    font-weight:600; padding:2px 8px; }
+
+
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{
+    outline:2px solid var(--cqa-teal-700); outline-offset:2px;
+    box-shadow:0 0 0 2px #fff, 0 0 0 4px rgba(32,112,110,.60); }
+
+
+@media (max-width:430px){
+  .cqa-brandbar svg{ height:38px; }   
+  .cqa-brandbar__in{ padding:12px 14px; }
+  .cqa-brandfoot__in{ padding:9px 14px; }
+  h1{ font-size:23px; } h2{ font-size:18px; }
+  main{ padding-left:14px; padding-right:14px; }
+}
+
+
+@media print{
+  body{ background:#fff; }
+  .cqa-brandbar{ background:none !important; border-bottom:2px solid var(--cqa-navy-900); }
+  .cqa-brandfoot{ background:none !important; border-top:1px solid var(--cqa-gray-300); }
+  .cqa-brandbar .cqa-logo--screen,.cqa-brandfoot .cqa-logo--screen{ display:none; }
+  .cqa-brandbar .cqa-logo--print,.cqa-brandfoot .cqa-logo--print{ display:block; }
+  th{ background:none !important; border-bottom:2px solid #000; }
+  tbody tr:nth-child(even){ background:none !important; }
+  table,.cqa-card,.cqa-xcard,.cqa-kpi{ break-inside:avoid; }
+  thead{ display:table-header-group; }
+}
+</style><link data-cqa-brand="1" rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkNRQSDigJQgc2ltYm9sbyBDb3JyZXNwb25kZW5jaWEiPjx0aXRsZT5DUUEg4oCUIHNpbWJvbG8gQ29ycmVzcG9uZGVuY2lhPC90aXRsZT48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiMxNjM3NEYiIGQ9Ik0yIDQuNSBIOC42IFYxOS41IEgyIFogTTMuOCA2LjMgSDYuOCBWMTcuNyBIMy44IFoiLz48cmVjdCB4PSIyIiB5PSI0LjUiIHdpZHRoPSI2LjYiIGhlaWdodD0iMy40IiBmaWxsPSIjMTYzNzRGIi8+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBmaWxsPSIjMTYzNzRGIiBkPSJNMTUuNCA0LjUgSDIyLjAgVjE5LjUgSDE1LjQgWiBNMTcuMiA2LjMgSDIwLjIgVjE3LjcgSDE3LjIgWiIvPjxyZWN0IHg9IjE1LjQiIHk9IjQuNSIgd2lkdGg9IjYuNiIgaGVpZ2h0PSIzLjQiIGZpbGw9IiMxNjM3NEYiLz48cmVjdCB4PSI5LjgiIHk9IjguNyIgd2lkdGg9IjQuNCIgaGVpZ2h0PSIyLjIiIGZpbGw9IiMxNjM3NEYiLz48cmVjdCB4PSI5LjgiIHk9IjEzLjEiIHdpZHRoPSI0LjQiIGhlaWdodD0iMi4yIiBmaWxsPSIjMTYzNzRGIi8+PC9zdmc+"></head><body><header class="cqa-brandbar" data-cqa-brand="1"><div class="cqa-brandbar__in"><span class="cqa-logo--screen"><svg viewBox="0 0 322 72" role="img" aria-label="California Quant Analytics"><title>California Quant Analytics</title><g transform="translate(0,13) scale(1.9166666666666667)"><path fill-rule="evenodd" fill="#FFFFFF" d="M2 4.5 H8.6 V19.5 H2 Z M3.8 6.3 H6.8 V17.7 H3.8 Z"/><rect x="2" y="4.5" width="6.6" height="3.4" fill="#FFFFFF"/><path fill-rule="evenodd" fill="#FFFFFF" d="M15.4 4.5 H22.0 V19.5 H15.4 Z M17.2 6.3 H20.2 V17.7 H17.2 Z"/><rect x="15.4" y="4.5" width="6.6" height="3.4" fill="#FFFFFF"/><rect x="9.8" y="9.2" width="4.4" height="2.0" fill="#FFFFFF"/><rect x="9.8" y="12.8" width="4.4" height="2.0" fill="#FFFFFF"/></g><text x="64" y="44" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="31" font-weight="700" letter-spacing="0.2" fill="#FFFFFF">CQA</text><text x="64" y="59" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="10.2" font-weight="600" letter-spacing="1.6" fill="#FFFFFF">CALIFORNIA QUANT ANALYTICS</text><text x="64" y="72" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="9" font-weight="400" letter-spacing="0.3" fill="#CBD3DB">by California Quant Systems</text></svg></span><span class="cqa-logo--print"><svg viewBox="0 0 322 72" role="img" aria-label="California Quant Analytics"><title>California Quant Analytics</title><g transform="translate(0,13) scale(1.9166666666666667)"><path fill-rule="evenodd" fill="#16374F" d="M2 4.5 H8.6 V19.5 H2 Z M3.8 6.3 H6.8 V17.7 H3.8 Z"/><rect x="2" y="4.5" width="6.6" height="3.4" fill="#16374F"/><path fill-rule="evenodd" fill="#16374F" d="M15.4 4.5 H22.0 V19.5 H15.4 Z M17.2 6.3 H20.2 V17.7 H17.2 Z"/><rect x="15.4" y="4.5" width="6.6" height="3.4" fill="#16374F"/><rect x="9.8" y="9.2" width="4.4" height="2.0" fill="#16374F"/><rect x="9.8" y="12.8" width="4.4" height="2.0" fill="#16374F"/></g><text x="64" y="44" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="31" font-weight="700" letter-spacing="0.2" fill="#16374F">CQA</text><text x="64" y="59" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="10.2" font-weight="600" letter-spacing="1.6" fill="#16374F">CALIFORNIA QUANT ANALYTICS</text><text x="64" y="72" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="9" font-weight="400" letter-spacing="0.3" fill="#566370">by California Quant Systems</text></svg></span></div></header><main data-cqa-ui-version="1" data-cqs-round="cqs_core_2026-09-11" data-locale="pt-BR">
+<div class="cqa-navrow"><nav class="cqa-nav"><a href="index.html">Núcleo Oficial</a><span class="sep">·</span><a href="btc/index.html">BTC</a><span class="sep">·</span><a href="gold/index.html">Gold</a><span class="sep">·</span><a href="usatec/index.html">USATEC</a><span class="sep">·</span><a href="compare/index.html">Comparar</a><span class="sep">·</span><a href="research/index.html">Research</a></nav><div class="cqa-lang" role="group" aria-label="Idioma"><a href="../index.html" lang="en-US" hreflang="en-US">EN</a><span class="cqa-lang__sep">|</span><span class="cqa-lang__on" aria-current="true" lang="pt-BR">PT</span></div></div>
+<nav class="cqa-crumb">Núcleo Oficial CQS</nav>
+<h1>Núcleo Oficial CQS</h1>
+<p class="sub">Seis estratégias oficiais · TREND 10M e COMPRESSION 10M sobre BTCFUT, GOLD e USATEC · rodada de 2026-09-11.</p>
+<div class="scope"><strong>Cenário econômico:</strong> S1 é o cenário operacional base do CQS (tarifa oficial da corretora + slippage modelado de 1 tick por lado). NATIVE é a evidência de performance bruta e permanece publicado ao lado do S1, nunca substituído por ele.</div><section class="ofc-pipe" id="pipeline" data-section="pipeline"><h2>Pipeline de validação e analytics do CQS</h2><p class="ofc-pipe__lead">O CQS transforma evidência trade-a-trade em resultados normalizados, reconciliados, auditáveis e ajustados a custos antes de qualquer estratégia integrar o núcleo oficial.</p><ol class="ofc-pipe__steps"><li class="ofc-pipe__step" data-pipe-step="1"><span class="ofc-pipe__n">01</span><span class="ofc-pipe__t">Fonte trade-a-trade</span><span class="ofc-pipe__d">Exportação da plataforma, operação a operação, com SHA-256 registrado.</span></li><li class="ofc-pipe__step" data-pipe-step="2"><span class="ofc-pipe__n">02</span><span class="ofc-pipe__t">Normalização nativa</span><span class="ofc-pipe__d">Normalizadora v0.5 tipa, valida e apura o resultado nativo.</span></li><li class="ofc-pipe__step" data-pipe-step="3"><span class="ofc-pipe__n">03</span><span class="ofc-pipe__t">Reconciliação interna</span><span class="ofc-pipe__d">Confere o apurado contra o próprio ledger. Divergência bloqueia.</span></li><li class="ofc-pipe__step" data-pipe-step="4"><span class="ofc-pipe__n">04</span><span class="ofc-pipe__t">Strategy Manifest</span><span class="ofc-pipe__d">Contrato declarado: ativo, exchange, PointValue e quantidade.</span></li><li class="ofc-pipe__step" data-pipe-step="5"><span class="ofc-pipe__n">05</span><span class="ofc-pipe__t">Custos &amp; slippage</span><span class="ofc-pipe__d">Cenários NATIVE, S0, S1 e S2 sobre tarifa oficial e slippage modelado.</span></li><li class="ofc-pipe__step" data-pipe-step="6"><span class="ofc-pipe__n">06</span><span class="ofc-pipe__t">Analytics</span><span class="ofc-pipe__d">Curva de capital, drawdown, mensal, risco e comparação.</span></li><li class="ofc-pipe__step" data-pipe-step="7"><span class="ofc-pipe__n">07</span><span class="ofc-pipe__t">Decisão oficial CQS</span><span class="ofc-pipe__d">GO / NO-GO humano. A ferramenta não homologa sozinha.</span></li></ol><p class="ofc-pipe__cap">Sete etapas. Nenhuma estratégia entra no núcleo oficial sem percorrer todas.</p></section><section class="ofc-asset" id="btc" data-asset="BTCFUT"><div class="ofc-asset__head"><span class="ofc-rank">1</span><h2>BTC FUTURES</h2><span class="ofc-asset__contract">BTC / CME · PointValue 5</span></div><div class="ofc-grid"><article class="ofc-card" data-strategy="BTCFUT_TREND_10M"><h3>TREND 10M</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 147.732,16</p><p class="ofc-native">NATIVE US$ 151.675,00</p><p class="ofc-scenlab" data-scenario="NATIVE">MÉTRICAS DE RISCO — NATIVE</p><dl class="ofc-kv"><dt>Trades</dt><dd>58</dd><dt>Profit Factor</dt><dd>4,67</dd><dt>Drawdown</dt><dd>-US$ 9.050,00</dd><dt>Win rate</dt><dd>58,62%</dd><dt>Payoff</dt><dd>3,30</dd></dl><p class="ofc-status">ELIGIBLE FOR HOMOLOGATION · Reconciliação PASS · Custos RESOLVED</p></article><article class="ofc-card" data-strategy="BTCFUT_COMP_10M"><h3>COMPRESSION 10M</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 43.222,92</p><p class="ofc-native">NATIVE US$ 46.350,00</p><p class="ofc-scenlab" data-scenario="NATIVE">MÉTRICAS DE RISCO — NATIVE</p><dl class="ofc-kv"><dt>Trades</dt><dd>46</dd><dt>Profit Factor</dt><dd>5,77</dd><dt>Drawdown</dt><dd>-US$ 2.375,00</dd><dt>Win rate</dt><dd>47,83%</dd><dt>Payoff</dt><dd>3,15</dd></dl><p class="ofc-status">ELIGIBLE FOR HOMOLOGATION · Reconciliação PASS · Custos RESOLVED</p></article><article class="ofc-card ofc-card--combined" data-combined="BTCFUT"><h3>TREND + COMPRESSION</h3><p class="ofc-card__verdict">GO — OFFICIAL CQS PAIR</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 190.955,08</p><p class="ofc-native">NATIVE US$ 198.025,00</p><dl class="ofc-kv"><dt>Trades</dt><dd>104</dd></dl><p class="ofc-scenlab" data-scenario="NATIVE">PAR CONSOLIDADO — NATIVE</p><dl class="ofc-kv"><dt>Profit Factor</dt><dd>4,88</dd><dt>DD consolidado</dt><dd>-US$ 6.050,00</dd><dt>Net/DD</dt><dd>32,73</dd></dl><p class="ofc-scenlab" data-scenario="S1">PAR CONSOLIDADO — S1</p><dl class="ofc-kv"><dt>Profit Factor</dt><dd>4,51</dd><dt>DD consolidado</dt><dd>-US$ 6.253,94</dd><dt>Net/DD</dt><dd>30,53</dd></dl><p class="ofc-combined-label">TREND + COMPRESSION — RESULTADO COMBINADO ARITMÉTICO</p><p class="ofc-note">Resultado combinado aritmético — não é retorno de portfólio. Consolidação cronológica trade a trade concluída: PF, drawdown e Net/DD acima são consolidados oficiais, medidos na curva do par — não são soma.</p></article></div><p class="ofc-warn"><strong>Exposição overnight.</strong> As duas estratégias operam com HorarioEncerramento_Ativo = 0; portanto posições podem permanecer abertas overnight. Isso pode elevar a necessidade de capital e margem, que será dimensionada posteriormente no Capital &amp; Exposure Study.</p><a class="cqa-open" href="btc/index.html">Analytics completo de BTC FUTURES →</a></section><section class="ofc-asset" id="gold" data-asset="GOLD"><div class="ofc-asset__head"><span class="ofc-rank">2</span><h2>GOLD</h2><span class="ofc-asset__contract">MGC / COMEX · PointValue 10</span></div><div class="ofc-grid"><article class="ofc-card" data-strategy="GOLD_TREND_10M"><h3>TREND 10M</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 21.170,14</p><p class="ofc-native">NATIVE US$ 22.164,00</p><p class="ofc-scenlab" data-scenario="NATIVE">MÉTRICAS DE RISCO — NATIVE</p><dl class="ofc-kv"><dt>Trades</dt><dd>217</dd><dt>Profit Factor</dt><dd>2,31</dd><dt>Drawdown</dt><dd>-US$ 1.227,00</dd><dt>Win rate</dt><dd>49,77%</dd><dt>Payoff</dt><dd>2,27</dd></dl><p class="ofc-status">ELIGIBLE FOR HOMOLOGATION · Reconciliação PASS · Custos RESOLVED</p></article><article class="ofc-card" data-strategy="GOLD_COMP_10M"><h3>COMPRESSION 10M</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 7.045,22</p><p class="ofc-native">NATIVE US$ 7.691,00</p><p class="ofc-scenlab" data-scenario="NATIVE">MÉTRICAS DE RISCO — NATIVE</p><dl class="ofc-kv"><dt>Trades</dt><dd>141</dd><dt>Profit Factor</dt><dd>2,25</dd><dt>Drawdown</dt><dd>-US$ 855,00</dd><dt>Win rate</dt><dd>44,68%</dd><dt>Payoff</dt><dd>1,78</dd></dl><p class="ofc-status">ELIGIBLE FOR HOMOLOGATION · Reconciliação PASS · Custos RESOLVED</p></article><article class="ofc-card ofc-card--combined" data-combined="GOLD"><h3>TREND + COMPRESSION</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 28.215,36</p><p class="ofc-native">NATIVE US$ 29.855,00</p><dl class="ofc-kv"><dt>Trades</dt><dd>358</dd></dl><p class="ofc-combined-label">TREND + COMPRESSION — RESULTADO COMBINADO ARITMÉTICO</p><p class="ofc-note">Resultado combinado aritmético — não é retorno de portfólio. Sem consolidação cronológica formal nesta rodada: PF, drawdown e Net/DD do par não são publicados. Somar drawdowns de curvas distintas não produz drawdown.</p></article></div><a class="cqa-open" href="gold/index.html">Analytics completo de GOLD →</a></section><section class="ofc-asset" id="usatec" data-asset="USATEC"><div class="ofc-asset__head"><span class="ofc-rank">3</span><h2>USATEC</h2><span class="ofc-asset__contract">MNQ / CME · PointValue 2</span></div><div class="ofc-grid"><article class="ofc-card" data-strategy="USATEC_TREND_10M"><h3>TREND 10M</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 16.422,68</p><p class="ofc-native">NATIVE US$ 16.895,00</p><p class="ofc-scenlab" data-scenario="NATIVE">MÉTRICAS DE RISCO — NATIVE</p><dl class="ofc-kv"><dt>Trades</dt><dd>164</dd><dt>Profit Factor</dt><dd>2,38</dd><dt>Drawdown</dt><dd>-US$ 860,50</dd><dt>Win rate</dt><dd>60,98%</dd><dt>Payoff</dt><dd>1,50</dd></dl><p class="ofc-status">ELIGIBLE FOR HOMOLOGATION · Reconciliação PASS · Custos RESOLVED</p></article><article class="ofc-card" data-strategy="USATEC_COMP_10M"><h3>COMPRESSION 10M</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 5.879,08</p><p class="ofc-native">NATIVE US$ 6.697,00</p><p class="ofc-scenlab" data-scenario="NATIVE">MÉTRICAS DE RISCO — NATIVE</p><dl class="ofc-kv"><dt>Trades</dt><dd>284</dd><dt>Profit Factor</dt><dd>2,08</dd><dt>Drawdown</dt><dd>-US$ 504,00</dd><dt>Win rate</dt><dd>34,86%</dd><dt>Payoff</dt><dd>2,31</dd></dl><p class="ofc-status">ELIGIBLE FOR HOMOLOGATION · Reconciliação PASS · Custos RESOLVED</p></article><article class="ofc-card ofc-card--combined" data-combined="USATEC"><h3>TREND + COMPRESSION</h3><p class="ofc-card__verdict">OFFICIAL</p><p class="ofc-net"><span class="ofc-net__lab">S1 — CENÁRIO BASE</span>US$ 22.301,76</p><p class="ofc-native">NATIVE US$ 23.592,00</p><dl class="ofc-kv"><dt>Trades</dt><dd>448</dd></dl><p class="ofc-combined-label">TREND + COMPRESSION — RESULTADO COMBINADO ARITMÉTICO</p><p class="ofc-note">Resultado combinado aritmético — não é retorno de portfólio. Sem consolidação cronológica formal nesta rodada: PF, drawdown e Net/DD do par não são publicados. Somar drawdowns de curvas distintas não produz drawdown.</p></article></div><a class="cqa-open" href="usatec/index.html">Analytics completo de USATEC →</a></section><section class="ofc-agg" id="agregado"><h2>RESULTADO ARITMÉTICO AGREGADO DAS SEIS ESTRATÉGIAS OFICIAIS</h2><div class="ofc-agg__vals"><div><span class="ofc-net__lab">NATIVE</span><div class="ofc-agg__v">US$ 251.472,00</div></div><div><span class="ofc-net__lab">S1</span><div class="ofc-agg__v">US$ 241.472,20</div></div></div><p class="ofc-note">Soma aritmética das seis estratégias oficiais. NÃO é retorno de portfolio, performance de portfolio nem PnL de portfolio: não foi realizado o Capital &amp; Exposure Study multiativo, nem análise de correlação, simultaneidade ou drawdown global entre ativos.</p></section><p class="ofc-note">Nota metodológica: USATEC/Gold e BTC possuem pequenas diferenças de janela e proveniência entre as bases. Isso limita determinadas comparações temporais multiativo. Não invalida os resultados individuais nem os pares oficiais.</p><section class="ofc-prov ofc-sec" id="proveniencia"><h2>Proveniência e rastreabilidade</h2><div class="ofc-chain"><b>Cadeia de evidência</b><span>DISPLAY</span><span aria-hidden="true">→</span><span>OFFICIAL SNAPSHOT</span><span aria-hidden="true">→</span><span>NORMALIZED WORKBOOK</span><span aria-hidden="true">→</span><span>TRADE SOURCE</span><span aria-hidden="true">→</span><span>STRATEGY MANIFEST</span></div><p>Toda métrica desta página é rastreável: página → snapshot da rodada → workbook normalizado (SHA-256 verificado) → fonte trade a trade → Strategy Manifest. Nenhum número foi digitado manualmente.</p><p>Evidência governante: <code>Arquivo oficial de evidências do CQS (privado)</code><br>Inventário: <code>03_NORMALIZED_WORKBOOKS/NORMALIZED_WORKBOOKS_INVENTORY_2026-09-11.md</code><br>Normalizadora: CQA Native Trades Normalizer v0.5 / engine cqa_native 0.5.0<br>Catálogo de custos: broker_cost_profiles.json v0.2 (NinjaTrader, 2026-08-14, plano FREE)</p><div class="ofc-tablewrap"><table><thead><tr><th>Estratégia</th><th>Workbook SHA-256</th><th>Fonte trade a trade</th><th>Strategy Manifest</th></tr></thead><tbody><tr><td>BTCFUT_TREND_10M</td><td><code>67E392EAD4BF8381…</code></td><td>BTCFUT_TREND_10M_TRADES.csv</td><td>BTCFUT_TREND_10M__1_0.json</td></tr><tr><td>BTCFUT_COMP_10M</td><td><code>146BCBACC73F1A0D…</code></td><td>BTCFUT_COMP_10M_TRADES.csv</td><td>BTCFUT_COMP_10M__1_0.json</td></tr><tr><td>GOLD_TREND_10M</td><td><code>A508296D571F4C46…</code></td><td>GOLD_TREND_10M_TRADES.csv</td><td>GOLD_TREND_10M__1_0.json</td></tr><tr><td>GOLD_COMP_10M</td><td><code>CDA391B6248163EC…</code></td><td>GOLD_COMP_10M_TRADES.csv</td><td>GOLD_COMP_10M__1_0.json</td></tr><tr><td>USATEC_TREND_10M</td><td><code>1422DC0C93C80C9E…</code></td><td>USATEC_TREND_10M_TRADES.csv</td><td>USATEC_TREND_10M__1_0.json</td></tr><tr><td>USATEC_COMP_10M</td><td><code>D861312B3ED4BDFD…</code></td><td>USATEC_COMP_10M_TRADES.csv</td><td>USATEC_COMP_10M__1_0.json</td></tr></tbody></table></div><p>Par consolidado BTCFUT: BTCFUT_TREND_COMPRESSION_10M_CONSOLIDATED_TRADES_2026-09-11.csv — SHA-256 92C9AD8D22E032DB…. DERIVED ANALYTICS — acumulação por ordem de fechamento sobre o CSV consolidado oficial; o PnL de cada cenário já vem fornecido pela fonte. Drawdown efetivo medido na curva do par, nunca somando drawdowns individuais.</p><p>As bases têm pequenas diferenças de janela e proveniência entre ativos; a nota metodológica completa está na página Comparar.</p></section><section class="ofc-wip" id="research-in-progress" data-section="wip"><h2>Estudos em andamento</h2><p class="ofc-wip__lead">Linhas de pesquisa abertas. Não integram o núcleo oficial, não possuem resultado publicado e não passaram por decisão oficial.</p><div class="ofc-wip__cards"><article class="ofc-wip__card" data-wip="win"><p class="ofc-wip__name">Futuro de Ibovespa — WIN</p><p class="ofc-wip__alt">Ibovespa Futures</p><p class="ofc-wip__badge">EM ESTUDO</p><p class="ofc-wip__desc">Estudo de viabilidade para possível expansão futura do CQS ao mercado brasileiro de derivativos.</p></article><article class="ofc-wip__card" data-wip="dol"><p class="ofc-wip__name">Dólar Futuro — DOL / WDO</p><p class="ofc-wip__alt">USD/BRL Futures</p><p class="ofc-wip__badge">EM ESTUDO</p><p class="ofc-wip__desc">Estudo de viabilidade para possível expansão futura do CQS ao mercado brasileiro de derivativos.</p></article></div></section>
+</main><footer class="cqa-brandfoot" data-cqa-brand="1"><div class="cqa-brandfoot__in"><span class="cqa-logo--screen"><svg viewBox="0 0 322 72" role="img" aria-label="California Quant Analytics"><title>California Quant Analytics</title><g transform="translate(0,13) scale(1.9166666666666667)"><path fill-rule="evenodd" fill="#FFFFFF" d="M2 4.5 H8.6 V19.5 H2 Z M3.8 6.3 H6.8 V17.7 H3.8 Z"/><rect x="2" y="4.5" width="6.6" height="3.4" fill="#FFFFFF"/><path fill-rule="evenodd" fill="#FFFFFF" d="M15.4 4.5 H22.0 V19.5 H15.4 Z M17.2 6.3 H20.2 V17.7 H17.2 Z"/><rect x="15.4" y="4.5" width="6.6" height="3.4" fill="#FFFFFF"/><rect x="9.8" y="9.2" width="4.4" height="2.0" fill="#FFFFFF"/><rect x="9.8" y="12.8" width="4.4" height="2.0" fill="#FFFFFF"/></g><text x="64" y="44" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="31" font-weight="700" letter-spacing="0.2" fill="#FFFFFF">CQA</text><text x="64" y="59" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="10.2" font-weight="600" letter-spacing="1.6" fill="#FFFFFF">CALIFORNIA QUANT ANALYTICS</text><text x="64" y="72" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="9" font-weight="400" letter-spacing="0.3" fill="#CBD3DB">by California Quant Systems</text></svg></span><span class="cqa-logo--print"><svg viewBox="0 0 322 72" role="img" aria-label="California Quant Analytics"><title>California Quant Analytics</title><g transform="translate(0,13) scale(1.9166666666666667)"><path fill-rule="evenodd" fill="#16374F" d="M2 4.5 H8.6 V19.5 H2 Z M3.8 6.3 H6.8 V17.7 H3.8 Z"/><rect x="2" y="4.5" width="6.6" height="3.4" fill="#16374F"/><path fill-rule="evenodd" fill="#16374F" d="M15.4 4.5 H22.0 V19.5 H15.4 Z M17.2 6.3 H20.2 V17.7 H17.2 Z"/><rect x="15.4" y="4.5" width="6.6" height="3.4" fill="#16374F"/><rect x="9.8" y="9.2" width="4.4" height="2.0" fill="#16374F"/><rect x="9.8" y="12.8" width="4.4" height="2.0" fill="#16374F"/></g><text x="64" y="44" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="31" font-weight="700" letter-spacing="0.2" fill="#16374F">CQA</text><text x="64" y="59" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="10.2" font-weight="600" letter-spacing="1.6" fill="#16374F">CALIFORNIA QUANT ANALYTICS</text><text x="64" y="72" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="9" font-weight="400" letter-spacing="0.3" fill="#566370">by California Quant Systems</text></svg></span></div></footer></body></html>
